@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { mdiEye, mdiTrashCan } from "@mdi/js";
 import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
+import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
@@ -25,6 +26,8 @@ const perPage = ref(5);
 
 const currentPage = ref(0);
 
+const checkedRows = ref([]);
+
 const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
 
 const currentPageHuman = computed(() => currentPage.value + 1);
@@ -38,21 +41,44 @@ const pagesList = computed(() => {
 
   return pagesList;
 });
+
+const remove = (arr, cb) => {
+  const newArr = [];
+
+  arr.forEach((item) => {
+    if (!cb(item)) {
+      newArr.push(item);
+    }
+  });
+
+  return newArr;
+};
+
+const checked = (isChecked, client) => {
+  if (isChecked) {
+    checkedRows.value.push(client);
+  } else {
+    checkedRows.value = remove(
+      checkedRows.value,
+      (row) => row.id === client.id
+    );
+  }
+};
 </script>
 
 <script>
 export default {
   data() {
     return {
-      lands: null,
+      cultivation: null,
     };
   },
   mounted() {
     axios
-      .get("http://localhost:5000/land")
+      .get("http://localhost:5000/cultivation")
       .then((response) => {
-        this.lands = response.data.data;
-        console.log(this.lands);
+        this.cultivation = response.data.data;
+        console.log(this.cultivation);
       })
       .catch((error) => {
         console.log(error);
@@ -77,36 +103,50 @@ export default {
     <p>This is sample modal</p>
   </CardBoxModal>
 
+  <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
+    <span
+      v-for="checkedRow in checkedRows"
+      :key="checkedRow.id"
+      class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700"
+    >
+      {{ checkedRow.name }}
+    </span>
+  </div>
+
   <table>
     <thead>
       <tr>
         <th />
-        <th>Name</th>
-        <th>Address</th>
-        <th>Location</th>
-        <th>Created</th>
+        <th>Cultivation ID</th>
+        <th>Land</th>
+        <th>Created At</th>
+        <th>Updated At</th>
         <th />
       </tr>
     </thead>
     <tbody>
-      <tr v-for="land in lands" :key="land.id">
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar
-            :username="land.name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-          />
+      <tr v-for="data in cultivation" :key="data.id">
+        <td data-label="measurement_id">
+          <router-link :to="'/cultivation-detail/' + data.id">
+            {{ data.id }}
+          </router-link>
         </td>
         <td data-label="Name">
-          {{ land.name }}
+          {{ data.plant.name }}
         </td>
-        <td data-label="Address">
-          {{ land.address.district }}
+        <td class="lg:w-1 whitespace-nowrap">
+          {{
+            data.created_at
+              ? new Date(data.created_at).toISOString().split("T")[0]
+              : "-"
+          }}
         </td>
-        <td data-label="Location">
-          Long : {{ land.location.lng }}, Lat : {{ land.location.lat }}
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          {{ new Date(land.created_at).toISOString().split("T")[0] }}
+        <td class="lg:w-1 whitespace-nowrap">
+          {{
+            data.updated_at
+              ? new Date(data.updated_at).toISOString().split("T")[0]
+              : "-"
+          }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>

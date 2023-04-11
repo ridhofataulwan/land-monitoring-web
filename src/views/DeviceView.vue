@@ -8,13 +8,13 @@ import {
   mdiDevices,
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBoxWidget from "@/components/CardBoxWidget.vue";
-import CardBox from "@/components/CardBox.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBoxWidget from "@/components/CardBox/CardBoxWidget.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
 import DeviceTable from "@/components/DeviceView/DeviceTable.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 
 import axios from "axios";
 

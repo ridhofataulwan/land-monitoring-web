@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { mdiEye, mdiTrashCan } from "@mdi/js";
-import CardBoxModal from "@/components/CardBoxModal.vue";
+import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
@@ -136,19 +136,23 @@ export default {
           />
         </td>
         <td data-label="measurement_id">
-          {{ data.id }}
+          <router-link :to="'/measurement-detail/' + data.id">
+            {{ data.id }}
+          </router-link>
         </td>
         <td data-label="Name">
-          {{ data.land_id }}
+          {{ data.land.name }}
         </td>
-        <td data-label="State">
-          {{ data.device_id }}
-        </td>
-        <td class="lg:w-1 whitespace-nowrap">
-          {{ new Date(data.created_at).toISOString().split("T")[0] }}
+        <td :v-if="data.device" data-label="State">
+          {{ data.device ? data.device.id : "Belum Tertaut" }}
         </td>
         <td class="lg:w-1 whitespace-nowrap">
-          {{ new Date(data.updated_at).toISOString().split("T")[0] }}
+          {{
+            data.start ? new Date(data.start).toISOString().split("T")[0] : "-"
+          }}
+        </td>
+        <td class="lg:w-1 whitespace-nowrap">
+          {{ data.end ? new Date(data.end).toISOString().split("T")[0] : "-" }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>

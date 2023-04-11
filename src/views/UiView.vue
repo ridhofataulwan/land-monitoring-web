@@ -12,21 +12,21 @@ import {
   mdiReload,
   mdiTrendingUp,
 } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
-import CardBoxModal from "@/components/CardBoxModal.vue";
-import SectionTitle from "@/components/SectionTitle.vue";
-import FormField from "@/components/FormField.vue";
-import FormCheckRadioGroup from "@/components/FormCheckRadioGroup.vue";
+import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
+import SectionTitle from "@/components/Section/SectionTitle.vue";
+import FormField from "@/components/Form/FormField.vue";
+import FormCheckRadioGroup from "@/components/Form/FormCheckRadioGroup.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
-import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
-import CardBoxComponentTitle from "@/components/CardBoxComponentTitle.vue";
-import PillTag from "@/components/PillTag.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
+import CardBoxComponentEmpty from "@/components/CardBox/CardBoxComponentEmpty.vue";
+import CardBoxComponentTitle from "@/components/CardBox/CardBoxComponentTitle.vue";
+import PillTag from "@/components/Pill/PillTag.vue";
 
 const modalOneActive = ref(false);
 

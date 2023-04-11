@@ -2,9 +2,10 @@
 import { mdiLogout, mdiClose } from "@mdi/js";
 import { computed } from "vue";
 import { useStyleStore } from "@/stores/style.js";
-import AsideMenuList from "@/components/AsideMenuList.vue";
-import AsideMenuItem from "@/components/AsideMenuItem.vue";
+import AsideMenuList from "@/components/AsideMenu/AsideMenuList.vue";
+import AsideMenuItem from "@/components/AsideMenu/AsideMenuItem.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
+import router from "@/router";
 
 defineProps({
   menu: {
@@ -30,6 +31,11 @@ const menuClick = (event, item) => {
 
 const asideLgCloseClick = (event) => {
   emit("aside-lg-close-click", event);
+};
+
+const logout = () => {
+  localStorage.setItem("isAuthenticated", false);
+  router.push({ path: "/login" });
 };
 </script>
 
@@ -81,7 +87,7 @@ const asideLgCloseClick = (event) => {
       </div>
 
       <ul>
-        <AsideMenuItem :item="logoutItem" @menu-click="menuClick" />
+        <AsideMenuItem :item="logoutItem" @click="logout" />
       </ul>
     </div>
   </aside>

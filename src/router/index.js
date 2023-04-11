@@ -1,7 +1,4 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "@/views/HomeView.vue";
-import Land from "@/views/LandView.vue";
-import User from "@/views/UserView.vue";
 
 const routes = [
   {
@@ -12,7 +9,39 @@ const routes = [
     },
     path: "/",
     name: "dashboard",
-    component: Home,
+    component: () => import("@/views/HomeView.vue"),
+  },
+  {
+    meta: {
+      title: "Plant",
+    },
+    path: "/plant",
+    name: "plant",
+    component: () => import("@/views/PlantView.vue"),
+  },
+  {
+    meta: {
+      title: "Variety",
+    },
+    path: "/variety",
+    name: "variety",
+    component: () => import("@/views/VarietyView.vue"),
+  },
+  {
+    meta: {
+      title: "Cultivation",
+    },
+    path: "/cultivation",
+    name: "cultivation",
+    component: () => import("@/views/CultivationView.vue"),
+  },
+  {
+    meta: {
+      title: "Plant Problem",
+    },
+    path: "/plant-problem",
+    name: "plant-problem",
+    component: () => import("@/views/PlantProblemView.vue"),
   },
   {
     meta: {
@@ -20,7 +49,7 @@ const routes = [
     },
     path: "/land",
     name: "land",
-    component: Land,
+    component: () => import("@/views/LandView.vue"),
   },
   {
     meta: {
@@ -28,7 +57,7 @@ const routes = [
     },
     path: "/user",
     name: "user",
-    component: User,
+    component: () => import("@/views/UserView.vue"),
   },
   {
     meta: {
@@ -37,6 +66,15 @@ const routes = [
     path: "/measurement",
     name: "measurement",
     component: () => import("@/views/MeasurementView.vue"),
+  },
+  {
+    meta: {
+      title: "Measurement Detail",
+    },
+    path: "/measurement-detail/:id",
+    name: "measurement-detail",
+    component: () => import("@/views/Detail/MeasurementDetail.vue"),
+    props: true, // enables passing the `id` parameter as a prop to the component
   },
   {
     meta: {
@@ -102,6 +140,12 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 };
   },
+});
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = JSON.parse(localStorage.getItem("isAuthenticated"));
+  if (to.name !== "login" && !isAuthenticated) next({ name: "login" });
+  if (to.name === "login" && isAuthenticated) next({ name: "dashboard" });
+  else next();
 });
 
 export default router;

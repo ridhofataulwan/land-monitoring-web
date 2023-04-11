@@ -1,18 +1,18 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
-import CardBox from "@/components/CardBox.vue";
-import FormCheckRadioGroup from "@/components/FormCheckRadioGroup.vue";
-import FormFilePicker from "@/components/FormFilePicker.vue";
-import FormField from "@/components/FormField.vue";
-import FormControl from "@/components/FormControl.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
+import FormCheckRadioGroup from "@/components/Form/FormCheckRadioGroup.vue";
+import FormFilePicker from "@/components/Form/FormFilePicker.vue";
+import FormField from "@/components/Form/FormField.vue";
+import FormControl from "@/components/Form/FormControl.vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
-import SectionTitle from "@/components/SectionTitle.vue";
+import SectionTitle from "@/components/Section/SectionTitle.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 import NotificationBarInCard from "@/components/NotificationBarInCard.vue";
 
 const selectOptions = [

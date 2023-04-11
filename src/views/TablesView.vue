@@ -1,13 +1,13 @@
 <script setup>
 import { mdiTableBorder, mdiTableOff, mdiGithub } from "@mdi/js";
-import SectionMain from "@/components/SectionMain.vue";
+import SectionMain from "@/components/Section/SectionMain.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
 import TableSampleClients from "@/components/TableSampleClients.vue";
-import CardBox from "@/components/CardBox.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
+import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
+import CardBoxComponentEmpty from "@/components/CardBox/CardBoxComponentEmpty.vue";
 </script>
 
 <template>

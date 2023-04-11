@@ -4,9 +4,9 @@ import { useMainStore } from "@/stores/main";
 import { mdiCheckDecagram } from "@mdi/js";
 import BaseLevel from "@/components/BaseLevel.vue";
 import UserAvatarCurrentUser from "@/components/UserAvatarCurrentUser.vue";
-import CardBox from "@/components/CardBox.vue";
-import FormCheckRadio from "@/components/FormCheckRadio.vue";
-import PillTag from "@/components/PillTag.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
+import FormCheckRadio from "@/components/Form/FormCheckRadio.vue";
+import PillTag from "@/components/Pill/PillTag.vue";
 
 const mainStore = useMainStore();
 

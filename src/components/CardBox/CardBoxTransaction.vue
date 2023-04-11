@@ -6,9 +6,9 @@ import {
   mdiReceipt,
   mdiCreditCardOutline,
 } from "@mdi/js";
-import CardBox from "@/components/CardBox.vue";
+import CardBox from "@/components/CardBox/CardBox.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
-import PillTag from "@/components/PillTag.vue";
+import PillTag from "@/components/Pill/PillTag.vue";
 import IconRounded from "@/components/IconRounded.vue";
 
 const props = defineProps({

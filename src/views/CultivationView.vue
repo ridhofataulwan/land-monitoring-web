@@ -2,20 +2,21 @@
 import { ref, onMounted } from "vue";
 import { useMainStore } from "@/stores/main";
 import {
-  mdiAccountMultiple,
   mdiChartTimelineVariant,
   mdiWhatsapp,
+  mdiLandPlotsCircle,
+  mdiLeaf,
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/Section/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBox/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox/CardBox.vue";
+import CultivationTable from "@/components/CultivationView/CultivationTable.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 
 import axios from "axios";
-import UserTable from "@/components/UserView/UserTable.vue";
 
 const chartData = ref(null);
 
@@ -34,17 +35,16 @@ console.log(mainStore.clients.slice(0, 4));
 
 <script>
 export default {
-  components: { UserTable },
   data() {
     return {
-      pengguna: null,
+      cultivation: null,
     };
   },
   mounted() {
     axios
-      .get("http://localhost:5000/user")
+      .get("http://localhost:5000/cultivation")
       .then((response) => {
-        this.pengguna = response.data.count;
+        this.cultivation = response.data.count;
       })
       .catch((error) => {
         console.log(error);
@@ -76,16 +76,16 @@ export default {
         <CardBoxWidget
           trend-type="up"
           color="text-teal-500"
-          :icon="mdiAccountMultiple"
-          :number="pengguna"
-          label="Pengguna"
+          :icon="mdiLeaf"
+          :number="cultivation"
+          label="Budidaya"
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Penguna" />
+      <SectionTitleLineWithButton :icon="mdiLandPlotsCircle" title="Budidaya" />
 
       <CardBox has-table class="mb-2">
-        <UserTable />
+        <CultivationTable />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

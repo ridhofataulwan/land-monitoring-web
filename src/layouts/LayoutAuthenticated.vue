@@ -7,9 +7,9 @@ import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
 import { useStyleStore } from "@/stores/style.js";
 import BaseIcon from "@/components/BaseIcon.vue";
-import NavBar from "@/components/NavBar.vue";
-import NavBarItemPlain from "@/components/NavBarItemPlain.vue";
-import AsideMenu from "@/components/AsideMenu.vue";
+import NavBar from "@/components/NavBar/NavBar.vue";
+import NavBarItemPlain from "@/components/NavBar/NavBarItemPlain.vue";
+import AsideMenu from "@/components/AsideMenu/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
 
 useMainStore().setUser({

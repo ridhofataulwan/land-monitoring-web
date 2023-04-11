@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { mdiEye, mdiTrashCan } from "@mdi/js";
-import CardBoxModal from "@/components/CardBoxModal.vue";
+import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
 import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
