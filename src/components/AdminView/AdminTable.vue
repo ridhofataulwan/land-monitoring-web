@@ -9,7 +9,7 @@ import BaseButton from "@/components/BaseButton.vue";
 // 📌 Pagination
 const perPage = ref(5);
 const currentPage = ref(0);
-const numPages = computed(() => Math.ceil(props.usersCount / perPage.value));
+const numPages = computed(() => Math.ceil(props.adminsCount / perPage.value));
 const currentPageHuman = computed(() => currentPage.value + 1);
 const pagesList = computed(() => {
   const pagesList = [];
@@ -20,27 +20,28 @@ const pagesList = computed(() => {
 });
 
 const props = defineProps({
-  usersCount: {
+  adminsCount: {
     type: Number,
     required: true,
   },
-  users: {
+  admins: {
     type: Array,
     required: true,
   },
 });
 
-let selectedUser = ref(null);
+let selectedAdmin = ref(null);
 let isModalActive = ref(false);
 
-const selectUser = (user) => {
-  selectedUser.value = user;
+const selectAdmin = (admin) => {
+  selectedAdmin.value = admin;
   isModalActive.value = true;
 };
-
-const unselectUser = () => {
-  selectedUser.value = null;
-  isModalActive.value = false;
+const obfuscateEmail = (email) => {
+  const [adminname, domain] = email.split("@");
+  const obfuscatedAdminname =
+    adminname.slice(0, 3) + "*".repeat(adminname.length - 3);
+  return obfuscatedAdminname + "@" + domain;
 };
 
 const no = 1;
@@ -48,33 +49,35 @@ const no = 1;
 <template>
   <CardBoxModal
     v-model="isModalActive"
-    :title="selectedUser ? selectedUser.name : ''"
+    :title="selectedAdmin ? selectedAdmin.name : ''"
   >
-    <template v-if="selectedUser">
-      <p>
-        <b>ID : </b><a>{{ selectedUser.id }}</a>
-      </p>
+    <template v-if="selectedAdmin">
+      <p><b>ID : </b>{{ selectedAdmin.id }}</p>
       <p>
         <b>Email : </b
-        ><a :href="'mailto:' + selectedUser.email">{{ selectedUser.email }}</a>
+        ><a :href="'mailto:' + selectedAdmin.email">{{
+          selectedAdmin.email
+        }}</a>
       </p>
-      <p><b>No. HP : </b>{{ selectedUser.phone_number }}</p>
+      <p><b>No. HP : </b>{{ selectedAdmin.phone_number }}</p>
       <p>
         <b>Alamat :</b>
-        {{ selectedUser.address.province }},
-        {{ selectedUser.address.district }}, {{ selectedUser.address.regency }},
-        {{ selectedUser.address.village }}
+        {{ selectedAdmin.address.province }},
+        {{ selectedAdmin.address.district }},
+        {{ selectedAdmin.address.regency }},
+        {{ selectedAdmin.address.village }}
       </p>
       <p>
         <b>Terdaftar pada : </b
-        >{{ new Date(selectedUser.created_at).toISOString().split("T")[0] }}
+        >{{ new Date(selectedAdmin.created_at).toISOString().split("T")[0] }}
       </p>
       <p>
         <b>Diperbarui pada : </b
-        >{{ new Date(selectedUser.updated_at).toISOString().split("T")[0] }}
+        >{{ new Date(selectedAdmin.updated_at).toISOString().split("T")[0] }}
       </p>
     </template>
   </CardBoxModal>
+
   <table>
     <thead>
       <tr>
@@ -87,26 +90,23 @@ const no = 1;
         <th>Aksi</th>
       </tr>
     </thead>
-    <tbody @mouseover="unselectUser">
-      <tr v-if="users.status">
-        <td colspan="7">Data tidak ditemukan</td>
-      </tr>
-      <tr v-for="user in users" :key="user.id">
+    <tbody>
+      <tr v-for="admin in admins" :key="admin.id">
         <td>{{ no++ }}</td>
-        <td data-label="Name" @mousedown="selectUser(user)">
-          {{ user.name }}
+        <td data-label="Name">
+          {{ admin.name }}
         </td>
-        <td :title="user.email">
-          {{ user.email }}
+        <td :title="admin.email">
+          {{ obfuscateEmail(admin.email) }}
         </td>
         <td data-label="District">
-          {{ user.address.district }}
+          {{ admin.address.district }}
         </td>
         <td data-label="Phone Number" class="lg:w-32">
-          {{ user.phone_number }}
+          {{ admin.phone_number }}
         </td>
         <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          {{ new Date(user.created_at).toISOString().split("T")[0] }}
+          {{ new Date(admin.created_at).toISOString().split("T")[0] }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
@@ -114,7 +114,7 @@ const no = 1;
               color="info"
               :icon="mdiEye"
               small
-              :to="'/user/' + user.id"
+              @click="selectAdmin(admin)"
             />
           </BaseButtons>
         </td>

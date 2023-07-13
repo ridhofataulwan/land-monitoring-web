@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
     <div
       class="flex items-center"
       :class="{
-        'bg-gray-100 dark:bg-slate-800 lg:bg-transparent lg:dark:bg-transparent p-3 lg:p-0':
+        'bg-gray-100 dark:bg-slate-800 lg:bg-transparent lg:dark:bg-transparent p-3 lg:p-0 text-white':
           item.menu,
       }"
     >
@@ -119,7 +119,7 @@ onBeforeUnmount(() => {
       <BaseIcon
         v-if="item.menu"
         :path="isDropdownActive ? mdiChevronUp : mdiChevronDown"
-        class="hidden lg:inline-flex transition-colors"
+        class="hidden lg:inline-flex transition-colors text-white"
       />
     </div>
     <div

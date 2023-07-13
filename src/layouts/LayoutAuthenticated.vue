@@ -12,11 +12,14 @@ import NavBarItemPlain from "@/components/NavBar/NavBarItemPlain.vue";
 import AsideMenu from "@/components/AsideMenu/AsideMenu.vue";
 import FooterBar from "@/components/FooterBar.vue";
 
+import { decodeToken, destroyToken, getToken } from "@/services/jwt.js";
+
+const decodedToken = decodeToken(getToken());
+
 useMainStore().setUser({
-  name: "Ridho Fata Ulwan",
-  email: "john@example.com",
-  avatar:
-    "https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93",
+  name: decodedToken.payload.name,
+  email: decodedToken.payload.email,
+  avatar: "/logo.png",
 });
 
 const layoutAsidePadding = "xl:pl-60";
@@ -39,7 +42,8 @@ const menuClick = (event, item) => {
   }
 
   if (item.isLogout) {
-    //
+    destroyToken();
+    router.replace("/login");
   }
 };
 </script>

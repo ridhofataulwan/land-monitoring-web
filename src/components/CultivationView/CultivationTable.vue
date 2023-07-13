@@ -3,12 +3,10 @@ import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
 import { mdiEye, mdiTrashCan } from "@mdi/js";
 import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
-import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import UserAvatar from "@/components/UserAvatar.vue";
-import axios from "axios";
+import api from "@/services/axios.js";
 
 defineProps({
   checkable: Boolean,
@@ -41,29 +39,6 @@ const pagesList = computed(() => {
 
   return pagesList;
 });
-
-const remove = (arr, cb) => {
-  const newArr = [];
-
-  arr.forEach((item) => {
-    if (!cb(item)) {
-      newArr.push(item);
-    }
-  });
-
-  return newArr;
-};
-
-const checked = (isChecked, client) => {
-  if (isChecked) {
-    checkedRows.value.push(client);
-  } else {
-    checkedRows.value = remove(
-      checkedRows.value,
-      (row) => row.id === client.id
-    );
-  }
-};
 </script>
 
 <script>
@@ -74,8 +49,8 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get("http://localhost:5000/cultivation")
+    api
+      .get("/cultivation")
       .then((response) => {
         this.cultivation = response.data.data;
         console.log(this.cultivation);
@@ -116,20 +91,18 @@ export default {
   <table>
     <thead>
       <tr>
-        <th />
+        <th>#</th>
         <th>Cultivation ID</th>
         <th>Land</th>
         <th>Created At</th>
         <th>Updated At</th>
-        <th />
+        <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="data in cultivation" :key="data.id">
         <td data-label="measurement_id">
-          <router-link :to="'/cultivation-detail/' + data.id">
-            {{ data.id }}
-          </router-link>
+          {{ data.id }}
         </td>
         <td data-label="Name">
           {{ data.plant.name }}

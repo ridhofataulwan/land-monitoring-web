@@ -1,55 +1,38 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useMainStore } from "@/stores/main";
 import {
+  mdiAccountMultiple,
+  mdiCalculatorVariantOutline,
   mdiChartTimelineVariant,
   mdiWhatsapp,
-  mdiLandPlotsCircle,
-  mdiDevices,
 } from "@mdi/js";
-import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/Section/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBox/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox/CardBox.vue";
-import DeviceTable from "@/components/DeviceView/DeviceTable.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
 
-import axios from "axios";
-
-const chartData = ref(null);
-
-const fillChartData = () => {
-  chartData.value = chartConfig.sampleChartData();
-};
+import api from "@/services/axios.js";
+import MeasurementTable from "@/components/MeasurementView/MeasurementTable.vue";
 
 onMounted(() => {
-  fillChartData();
+  getMeasurementData();
 });
 
-const mainStore = useMainStore();
-console.log(mainStore.clients);
-console.log(mainStore.clients.slice(0, 4));
-</script>
+let measurement = ref([]);
+let measurementCount = ref(null);
 
-<script>
-export default {
-  data() {
-    return {
-      device: null,
-    };
-  },
-  mounted() {
-    axios
-      .get("http://localhost:5000/device")
-      .then((response) => {
-        this.device = response.data.count;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
+const getMeasurementData = () => {
+  api
+    .get("/measurement")
+    .then((response) => {
+      measurementCount.value = response.data.count;
+      measurement.value = response.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 
@@ -58,7 +41,7 @@ export default {
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiChartTimelineVariant"
-        title="Overview"
+        title="Pengukuran"
         main
       >
         <BaseButton
@@ -76,16 +59,22 @@ export default {
         <CardBoxWidget
           trend-type="up"
           color="text-teal-500"
-          :icon="mdiDevices"
-          :number="device"
-          label="Perangkat"
+          :icon="mdiCalculatorVariantOutline"
+          :number="measurementCount"
+          label="Pengukuran"
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiLandPlotsCircle" title="Device" />
+      <SectionTitleLineWithButton
+        :icon="mdiAccountMultiple"
+        title="Pengukuran"
+      />
 
       <CardBox has-table class="mb-2">
-        <DeviceTable />
+        <MeasurementTable
+          :measurements="measurement"
+          :measurements-count="measurementCount"
+        />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

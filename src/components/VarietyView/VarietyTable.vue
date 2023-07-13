@@ -1,135 +1,121 @@
 <script setup>
-import { computed, ref } from "vue";
-import { useMainStore } from "@/stores/main";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
+import { computed, ref, defineEmits } from "vue";
+import { mdiEye, mdiPencil, mdiTrashCan } from "@mdi/js";
 import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
-import TableCheckboxCell from "@/components/TableCheckboxCell.vue";
 import BaseLevel from "@/components/BaseLevel.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import axios from "axios";
+import api from "@/services/axios.js";
 
-defineProps({
-  checkable: Boolean,
-});
-
-const mainStore = useMainStore();
-
-const items = computed(() => mainStore.clients);
-
-const isModalActive = ref(false);
-
-const isModalDangerActive = ref(false);
-
+// 📌 Pagination
 const perPage = ref(5);
-
 const currentPage = ref(0);
-
-const checkedRows = ref([]);
-
-const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
-
+const numPages = computed(() =>
+  Math.ceil(props.varietiesCount / perPage.value)
+);
 const currentPageHuman = computed(() => currentPage.value + 1);
-
 const pagesList = computed(() => {
   const pagesList = [];
-
   for (let i = 0; i < numPages.value; i++) {
     pagesList.push(i);
   }
-
   return pagesList;
 });
 
-const remove = (arr, cb) => {
-  const newArr = [];
+const props = defineProps({
+  varietiesCount: {
+    type: Number,
+    required: true,
+  },
+  varieties: {
+    type: Array,
+    required: true,
+  },
+});
 
-  arr.forEach((item) => {
-    if (!cb(item)) {
-      newArr.push(item);
-    }
-  });
+const emit = defineEmits(["variety-updated"]);
 
-  return newArr;
+let selectedVariety = ref(null);
+
+let isModalDangerActive = ref(false);
+let isModalResponse = ref(false);
+
+let alertMessage = ref(null);
+
+const deleteVariety = (variety) => {
+  selectedVariety.value = variety;
+  isModalDangerActive.value = true;
 };
 
-const checked = (isChecked, client) => {
-  if (isChecked) {
-    checkedRows.value.push(client);
-  } else {
-    checkedRows.value = remove(
-      checkedRows.value,
-      (row) => row.id === client.id
-    );
+const handleDeleteVariety = async () => {
+  try {
+    const response = await api.delete(`/variety/${selectedVariety.value.id}`);
+    console.log(response);
+    alertMessage.value = response.data.message;
+    isModalDangerActive.value = false;
+    isModalResponse.value = true;
+    emit("variety-updated");
+    setTimeout(() => {
+      isModalResponse.value = false;
+    }, 500);
+  } catch (error) {
+    console.error(error);
   }
 };
-</script>
 
-<script>
-export default {
-  data() {
-    return {
-      varieties: null,
-    };
-  },
-  mounted() {
-    axios
-      .get("http://localhost:5000/variety")
-      .then((response) => {
-        this.varieties = response.data.data;
-        console.log(this.varieties);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-};
+const no = 1;
 </script>
 
 <template>
-  <CardBoxModal v-model="isModalActive" title="Sample modal">
-    <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-    <p>This is sample modal</p>
-  </CardBoxModal>
-
+  <!-- Modal Delete -->
   <CardBoxModal
     v-model="isModalDangerActive"
-    title="Please confirm"
+    :title="selectedVariety ? selectedVariety.name : ''"
     button="danger"
+    button-label="Confirm"
     has-cancel
   >
-    <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-    <p>This is sample modal</p>
+    <p v-if="isModalDangerActive">
+      Apakah anda yakin akan menghapus
+      {{ selectedVariety.name }} ?
+    </p>
+    <BaseButton
+      label="Confirm"
+      color="danger"
+      @click="handleDeleteVariety(selectedVariety.id)"
+    />
   </CardBoxModal>
 
-  <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
-    <span
-      v-for="checkedRow in checkedRows"
-      :key="checkedRow.id"
-      class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700"
-    >
-      {{ checkedRow.name }}
-    </span>
-  </div>
-
+  <!-- Modal Response -->
+  <CardBoxModal
+    v-model="isModalResponse"
+    :title="selectedVariety ? selectedVariety.name : ''"
+    button="danger"
+    button-label="Confirm"
+    has-cancel
+  >
+    <p v-if="isModalResponse">
+      {{ alertMessage }}
+    </p>
+  </CardBoxModal>
   <table>
     <thead>
       <tr>
-        <th v-if="checkable" />
-        <th>Name</th>
+        <th>#</th>
+        <th>ID</th>
+        <th>Nama</th>
         <th>Jenis Tanaman</th>
-        <th>Created</th>
-        <th>Updated</th>
-        <th />
+        <th>Dibuat</th>
+        <th>Diperbarui</th>
+        <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="variety in varieties" :key="variety.id">
-        <TableCheckboxCell
-          v-if="checkable"
-          @checked="checked($event, variety)"
-        />
-
+        <td>{{ no++ }}</td>
+        <td>
+          {{ variety.id }}
+        </td>
         <td data-label="Name">
           {{ variety.name }}
         </td>
@@ -148,13 +134,19 @@ export default {
               color="info"
               :icon="mdiEye"
               small
-              @click="isModalActive = true"
+              :to="'/variety/' + variety.id"
+            />
+            <BaseButton
+              color="info"
+              :icon="mdiPencil"
+              small
+              :to="'/variety/' + variety.id"
             />
             <BaseButton
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="isModalDangerActive = true"
+              @click="deleteVariety(variety)"
             />
           </BaseButtons>
         </td>

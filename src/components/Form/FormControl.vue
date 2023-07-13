@@ -36,6 +36,10 @@ const props = defineProps({
     type: Array,
     default: null,
   },
+  selectedOption: {
+    type: [String, Number, Boolean, Array, Object],
+    default: null,
+  },
   type: {
     type: String,
     default: "text",
@@ -43,6 +47,10 @@ const props = defineProps({
   modelValue: {
     type: [String, Number, Boolean, Array, Object],
     default: "",
+  },
+  sufix: {
+    type: String,
+    default: null,
   },
   required: Boolean,
   borderless: Boolean,
@@ -137,7 +145,8 @@ if (props.ctrlKFocus) {
       <option
         v-for="option in options"
         :key="option.id ?? option"
-        :value="option"
+        :value="option.id"
+        :selected="option.id === selectedOption"
       >
         {{ option.label ?? option }}
       </option>
@@ -152,20 +161,27 @@ if (props.ctrlKFocus) {
       :placeholder="placeholder"
       :required="required"
     />
-    <input
+    <div
       v-else
-      :id="id"
-      ref="inputEl"
-      v-model="computedValue"
-      :name="name"
-      :maxlength="maxlength"
-      :inputmode="inputmode"
-      :autocomplete="autocomplete"
-      :required="required"
-      :placeholder="placeholder"
-      :type="computedType"
-      :class="inputElClass"
-    />
+      class="flex items-center border border-gray-500 dark:border-gray-800 rounded"
+    >
+      <input
+        :id="id"
+        ref="inputEl"
+        v-model="computedValue"
+        :name="name"
+        :maxlength="maxlength"
+        :inputmode="inputmode"
+        :autocomplete="autocomplete"
+        :required="required"
+        :placeholder="placeholder"
+        :type="computedType"
+        :class="inputElClass"
+      />
+      <span v-if="sufix" class="px-2 text-gray-500 dark:text-gray-400">
+        {{ sufix }}
+      </span>
+    </div>
     <FormControlIcon v-if="icon" :icon="icon" :h="controlIconH" />
   </div>
 </template>

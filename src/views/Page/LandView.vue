@@ -1,55 +1,39 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useMainStore } from "@/stores/main";
 import {
   mdiChartTimelineVariant,
   mdiWhatsapp,
+  mdiLandPlots,
   mdiLandPlotsCircle,
-  mdiLeaf,
 } from "@mdi/js";
-import * as chartConfig from "@/components/Charts/chart.config.js";
 import SectionMain from "@/components/Section/SectionMain.vue";
 import CardBoxWidget from "@/components/CardBox/CardBoxWidget.vue";
 import CardBox from "@/components/CardBox/CardBox.vue";
-import PlantTable from "@/components/PlantView/PlantTable.vue";
+import LandTable from "@/components/LandView/LandTable.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/Section/SectionTitleLineWithButton.vue";
+import api from "@/services/axios.js";
 
-import axios from "axios";
-
-const chartData = ref(null);
-
-const fillChartData = () => {
-  chartData.value = chartConfig.sampleChartData();
-};
-
-onMounted(() => {
-  fillChartData();
+let land = ref({
+  count: "",
+  data: "",
 });
 
-const mainStore = useMainStore();
-console.log(mainStore.clients);
-console.log(mainStore.clients.slice(0, 4));
-</script>
+onMounted(() => {
+  getLandData();
+});
 
-<script>
-export default {
-  data() {
-    return {
-      plant: null,
-    };
-  },
-  mounted() {
-    axios
-      .get("http://localhost:5000/plant")
-      .then((response) => {
-        this.plant = response.data.count;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
+const getLandData = () => {
+  api
+    .get("/land")
+    .then((response) => {
+      land.value.count = response.data.count;
+      land.value.data = response.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 
@@ -58,7 +42,7 @@ export default {
     <SectionMain>
       <SectionTitleLineWithButton
         :icon="mdiChartTimelineVariant"
-        title="Overview"
+        title="Lahan"
         main
       >
         <BaseButton
@@ -76,16 +60,16 @@ export default {
         <CardBoxWidget
           trend-type="up"
           color="text-teal-500"
-          :icon="mdiLeaf"
-          :number="plant"
-          label="Tanaman"
+          :icon="mdiLandPlots"
+          :number="land.count"
+          label="Lahan"
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiLandPlotsCircle" title="Plant" />
+      <SectionTitleLineWithButton :icon="mdiLandPlotsCircle" title="Lahan" />
 
       <CardBox has-table class="mb-2">
-        <PlantTable />
+        <LandTable :lands="land.data" />
       </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

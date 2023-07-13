@@ -15,11 +15,13 @@
     "axios": "^0.27.0",
     "chart.js": "^3.9.1",
     "jwt-decode": "^3.1.2",
+    "leaflet": "^1.9.4",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",
     "socket.io-client": "^4.6.1",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "vue3-leaflet": "^1.0.46"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
@@ -28,6 +30,7 @@
     "@vitejs/plugin-vue": "^3.0.3",
     "@vue/eslint-config-prettier": "^7.0.0",
     "autoprefixer": "^10.2.6",
+    "dotenv": "^16.1.4",
     "eslint": "^8.5.0",
     "eslint-plugin-vue": "^9.0.0",
     "postcss": "^8.3.0",

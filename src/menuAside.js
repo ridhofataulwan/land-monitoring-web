@@ -14,6 +14,7 @@ import {
   mdiLandPlots,
   mdiDevices,
   mdiMenuDown,
+  mdiShieldAccount,
 } from "@mdi/js";
 
 export default [
@@ -36,16 +37,16 @@ export default [
         icon: mdiGrain,
         to: "/variety",
       },
-      {
-        label: "Hama dan Penyakit",
-        icon: mdiVirus,
-        to: "/plant-problem",
-      },
-      {
-        label: "Budidaya",
-        icon: mdiCalculatorVariant,
-        to: "/cultivation",
-      },
+      // {
+      //   label: "Hama dan Penyakit",
+      //   icon: mdiVirus,
+      //   to: "/plant-problem",
+      // },
+      // {
+      //   label: "Budidaya",
+      //   icon: mdiCalculatorVariant,
+      //   to: "/cultivation",
+      // },
     ],
   },
   {
@@ -72,6 +73,11 @@ export default [
     to: "/user",
     label: "Pengguna",
     icon: mdiAccountGroup,
+  },
+  {
+    to: "/admin",
+    label: "Admin",
+    icon: mdiShieldAccount,
   },
   {
     label: "UI",

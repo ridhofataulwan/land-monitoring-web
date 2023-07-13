@@ -30,6 +30,10 @@ const wrapperClass = computed(() => {
     base.push("md:grid-cols-2");
   }
 
+  if (slotsLength === 4) {
+    base.push("grid grid-cols-4 gap-3");
+  }
+
   return base;
 });
 </script>

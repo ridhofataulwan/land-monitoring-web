@@ -1,8 +1,10 @@
 <script setup>
-import { reactive } from "vue";
-import { mdiAccount, mdiAsterisk } from "@mdi/js";
+import { ref } from "vue";
 import router from "@/router";
-import axios from "axios";
+import api from "@/services/axios.js";
+import { setToken } from "@/services/jwt.js";
+
+import { mdiAccount, mdiAsterisk } from "@mdi/js";
 import SectionFullScreen from "@/components/Section/SectionFullScreen.vue";
 import CardBox from "@/components/CardBox/CardBox.vue";
 import FormField from "@/components/Form/FormField.vue";
@@ -10,11 +12,48 @@ import FormControl from "@/components/Form/FormControl.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
 import LayoutGuest from "@/layouts/LayoutGuest.vue";
+import CardBoxModal from "@/components/CardBox/CardBoxModal.vue";
+
+const form = ref({
+  email: "",
+  password: "",
+});
+const isModalActive = ref(false);
+const alert = ref({
+  message: "",
+});
+
+const login = async () => {
+  try {
+    const response = await api.post(
+      "/auth/signin",
+      {
+        email: form.value.email,
+        password: form.value.password,
+      },
+      {}
+    );
+    if (response.data.success) {
+      setToken(response.data.token);
+      router.push({ path: "/" });
+    }
+  } catch (error) {
+    console.error(error);
+    isModalActive.value = true;
+    alert.value.message = "Email or password incorrect";
+  }
+};
 </script>
 
 <template>
   <LayoutGuest>
     <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBoxModal
+        v-model="isModalActive"
+        :title="alert.message"
+        class="text-center"
+      >
+      </CardBoxModal>
       <CardBox :class="cardClass" is-form @submit.prevent="login">
         <img
           :src="'/logo.png'"
@@ -29,7 +68,6 @@ import LayoutGuest from "@/layouts/LayoutGuest.vue";
             autocomplete="username"
           />
         </FormField>
-
         <FormField label="Password" help="Please enter your password">
           <FormControl
             v-model="form.password"
@@ -40,56 +78,10 @@ import LayoutGuest from "@/layouts/LayoutGuest.vue";
           />
         </FormField>
 
-        <template #footer>
-          <BaseButtons>
-            <BaseButton type="submit" color="info" label="Login" />
-          </BaseButtons>
-        </template>
+        <BaseButtons class="flex justify-center p-5">
+          <BaseButton type="submit" color="info" label="Login" />
+        </BaseButtons>
       </CardBox>
     </SectionFullScreen>
   </LayoutGuest>
 </template>
-
-<script>
-const form = reactive({
-  email: "",
-  password: "",
-  remember: false,
-});
-
-const login = async () => {
-  try {
-    const response = await axios.post("http://localhost:5000/auth/signin", {
-      email: form.email,
-      password: form.password,
-    });
-    if (response.data.success) {
-      localStorage.setItem("isAuthenticated", true);
-      if (form.remember) {
-        localStorage.setItem("email", form.email);
-        localStorage.setItem("password", form.password);
-      } else {
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-      }
-      localStorage.setItem("token", response.data.token);
-      // set authentication token to local storage or cookie
-      router.push({ path: "/" });
-    }
-  } catch (error) {
-    console.error(error);
-    // handle error
-  }
-};
-
-export default {
-  data() {
-    return {
-      form,
-    };
-  },
-  methods: {
-    login,
-  },
-};
-</script>

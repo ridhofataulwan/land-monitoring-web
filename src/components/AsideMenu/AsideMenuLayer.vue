@@ -6,7 +6,7 @@ import AsideMenuList from "@/components/AsideMenu/AsideMenuList.vue";
 import AsideMenuItem from "@/components/AsideMenu/AsideMenuItem.vue";
 import BaseIcon from "@/components/BaseIcon.vue";
 import router from "@/router";
-
+import { destroyToken } from "@/services/jwt.js";
 defineProps({
   menu: {
     type: Array,
@@ -34,8 +34,8 @@ const asideLgCloseClick = (event) => {
 };
 
 const logout = () => {
-  localStorage.setItem("isAuthenticated", false);
-  router.push({ path: "/login" });
+  destroyToken();
+  router.replace("/login");
 };
 </script>
 
@@ -64,7 +64,9 @@ const logout = () => {
               />
             </div>
             <div class="grow">
-              <b class="font-black text-l">Land Monitoring</b>
+              <b class="text-teal-600 dark:text-white text-lg"
+                >Land Monitoring</b
+              >
             </div>
           </div>
         </div>
