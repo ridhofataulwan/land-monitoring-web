@@ -11,6 +11,10 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
+  // Add CORS headers
+  config.headers["Access-Control-Allow-Origin"] =
+    "https://land-monitoring-web.vercel.app";
+
   return config;
 });
 
