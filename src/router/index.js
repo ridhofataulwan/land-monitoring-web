@@ -72,22 +72,6 @@ const routes = [
   },
   {
     meta: {
-      title: "Cultivation",
-    },
-    path: "/cultivation",
-    name: "cultivation",
-    component: () => import("@/views/Page/CultivationView.vue"),
-  },
-  {
-    meta: {
-      title: "Plant Problem",
-    },
-    path: "/plant-problem",
-    name: "plant-problem",
-    component: () => import("@/views/Page/PlantProblemView.vue"),
-  },
-  {
-    meta: {
       title: "Land",
     },
     path: "/land",
